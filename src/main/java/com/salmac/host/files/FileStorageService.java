@@ -44,9 +44,18 @@ public class FileStorageService {
             //System.out.println("targetLocation:  "+ targetLocation.toString());
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+
             return targetLocation.toString();
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    public void deleteFile(String targetLocation){
+        try {
+            Files.deleteIfExists(Paths.get(targetLocation));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
