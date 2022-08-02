@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,7 +100,9 @@ public class ServerController {
 
     @PostMapping("/script")
     public void addScript(ScriptDetailsDTO scriptDetailsDTO) {
+        //System.out.println("Inside addScript");
         scriptService.addScript(scriptDetailsDTO.toScriptEntity());
+        //scriptService.addScript(scriptEntity);
     }
 
     @PostMapping("/script/file")
@@ -107,6 +110,7 @@ public class ServerController {
         String fileName = fileStorageService.storeFile(file);
         ScriptEntity scriptEntity = scriptDetailsDTO.toScriptEntity();
         scriptEntity.setPath(fileName);
+        scriptEntity.setLastUpdateTime(LocalDateTime.now());
         scriptService.addScript(scriptEntity);
     }
 

@@ -1,6 +1,7 @@
 package com.salmac.host.service;
 
 import com.salmac.host.entity.ServerEntity;
+import com.salmac.host.entity.Status;
 import com.salmac.host.repo.ServerRepo;
 import com.salmac.host.routine.Constants;
 import com.salmac.host.routine.Utils;
@@ -25,12 +26,12 @@ public class ServerService {
         if (optionalServerEntity.isPresent()) {
             ServerEntity serverEntity = optionalServerEntity.get();
             serverEntity.setLatestDowntime(LocalDateTime.now());
-            serverEntity.setStatus(Constants.STATUS_ACTIVE);
+            serverEntity.setStatus(Status.Active);
             serverRepo.save(serverEntity);
         } else {
             ServerEntity serverEntity = ServerEntity.builder().ip(ip).name(name).os(os)
                     .latestUptime(LocalDateTime.now())
-                    .status(Constants.STATUS_ACTIVE)
+                    .status(Status.Active)
                     .build();
             serverRepo.save(serverEntity);
         }
@@ -48,7 +49,7 @@ public class ServerService {
                 Optional<ServerEntity> optionalServerEntity = serverRepo.getServerEntityByIp(e.getKey());
                 if(optionalServerEntity.isPresent()){
                     ServerEntity serverEntity = optionalServerEntity.get();
-                    serverEntity.setStatus(Constants.STATUS_INACTIVE);
+                    serverEntity.setStatus(Status.Inactive);
                     serverEntity.setLatestDowntime(LocalDateTime.now());
                 }
                 iter.remove();

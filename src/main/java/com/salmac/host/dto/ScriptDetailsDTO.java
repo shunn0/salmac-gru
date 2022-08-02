@@ -1,20 +1,27 @@
 package com.salmac.host.dto;
 
 import com.salmac.host.entity.ScriptEntity;
+import com.salmac.host.entity.ScriptType;
+import com.salmac.host.entity.Status;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class ScriptDetailsDTO {
+
+public class ScriptDetailsDTO implements Serializable {
 
     private Long id;
     private String name;
     private String content;
     private String targetOS;
     private String purpose;
-    private String scriptType;
-    private String status;
+    private ScriptType scriptType;
+    private Status status;
     private LocalDateTime lastUpdateTime;
 
+    public ScriptDetailsDTO(){
+
+    }
     public ScriptDetailsDTO(ScriptEntity scriptEntity){
         this.id = scriptEntity.getId();
         this.name = scriptEntity.getName();
@@ -38,5 +45,69 @@ public class ScriptDetailsDTO {
         scriptEntity.setLastUpdateTime(this.lastUpdateTime);
 
         return scriptEntity;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getTargetOS() {
+        return targetOS;
+    }
+
+    public void setTargetOS(String targetOS) {
+        this.targetOS = targetOS;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public ScriptType getScriptType() {
+        return scriptType;
+    }
+
+    public void setScriptType(ScriptType scriptType) {
+        this.scriptType = scriptType;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(LocalDateTime lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 }

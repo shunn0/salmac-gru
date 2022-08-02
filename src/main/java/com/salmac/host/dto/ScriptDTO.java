@@ -1,6 +1,8 @@
 package com.salmac.host.dto;
 
 import com.salmac.host.entity.ScriptEntity;
+import com.salmac.host.entity.ScriptType;
+import com.salmac.host.entity.Status;
 
 import java.time.LocalDateTime;
 
@@ -8,8 +10,8 @@ public class ScriptDTO {
     private Long id;
     private String name;
     private String targetOS;
-    private String scriptType;
-    private String status;
+    private ScriptType scriptType;
+    private Status status;
     private LocalDateTime lastUpdateTime;
 
     public ScriptDTO(ScriptEntity scriptEntity){
@@ -45,19 +47,19 @@ public class ScriptDTO {
         this.targetOS = targetOS;
     }
 
-    public String getScriptType() {
+    public ScriptType getScriptType() {
         return scriptType;
     }
 
-    public void setScriptType(String scriptType) {
+    public void setScriptType(ScriptType scriptType) {
         this.scriptType = scriptType;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

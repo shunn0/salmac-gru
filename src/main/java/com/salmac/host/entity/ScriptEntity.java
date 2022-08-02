@@ -1,5 +1,6 @@
 package com.salmac.host.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiParam;
 import lombok.*;
 
@@ -24,23 +25,25 @@ public class ScriptEntity implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @ApiParam(hidden = true)
+    @JsonIgnore
     @Column(name = "path", nullable = true)
     private String path;
 
     @Column(name = "target_os", nullable = false)
     private String targetOS;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = true)
     private String content;
 
     @Column(name = "purpose", nullable = true)
     private String purpose;
 
-    @Column(name = "script_type", nullable = true)
-    private String scriptType;
+    @Enumerated(EnumType.ORDINAL)
+    private ScriptType scriptType;
 
-    @Column(name = "status", nullable = true)
-    private String status;
+    @Enumerated(EnumType.ORDINAL)
+    private Status status;
 
     @Column(name = "last_update_time", nullable = true)
     private LocalDateTime lastUpdateTime;

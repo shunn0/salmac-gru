@@ -36,6 +36,6 @@ public class ServerEntity implements Serializable {
     @Column(name = "latest_downtime", nullable = true)
     private LocalDateTime latestDowntime;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.ORDINAL)
+    private Status status;
 }
