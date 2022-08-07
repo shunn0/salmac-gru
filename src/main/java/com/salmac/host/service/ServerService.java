@@ -6,6 +6,8 @@ import com.salmac.host.repo.ServerRepo;
 import com.salmac.host.routine.Constants;
 import com.salmac.host.routine.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -20,6 +22,15 @@ public class ServerService {
 
     @Autowired
     ServerRepo serverRepo;
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void loadServerLastHeartbeatMap() {
+        List<ServerEntity> serverEntityList = serverRepo.getServerEntitiesByStatus(Status.Active);
+        if(!serverEntityList.isEmpty()){
+            serverEntityList.stream().forEach(e -> Utils.serverLastHeartbeatMap.put(e.getIp(), e.getLatestUptime()));
+        }
+        System.out.println(Utils.serverLastHeartbeatMap.size());
+    }
 
     public void heartBeat(String ip, String name, String os) {
         Optional<ServerEntity> optionalServerEntity = serverRepo.getServerEntityByIp(ip);
@@ -51,6 +62,7 @@ public class ServerService {
                     ServerEntity serverEntity = optionalServerEntity.get();
                     serverEntity.setStatus(Status.Inactive);
                     serverEntity.setLatestDowntime(LocalDateTime.now());
+                    serverRepo.save(serverEntity);
                 }
                 iter.remove();
             }
