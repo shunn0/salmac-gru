@@ -5,6 +5,7 @@ import com.salmac.host.dto.ScriptDetailsDTO;
 import com.salmac.host.entity.ScriptEntity;
 import com.salmac.host.entity.ServerEntity;
 import com.salmac.host.files.FileStorageService;
+import com.salmac.host.routine.Utils;
 import com.salmac.host.routine.exception.ResourceNotFoundException;
 import com.salmac.host.service.ScriptService;
 import com.salmac.host.service.ServerService;
@@ -47,17 +48,20 @@ public class ServerController {
     //@PostMapping("/heartbeat")
     @RequestMapping(value = "/heartbeat", method = {RequestMethod.POST})
     public ResponseEntity heartbeat(String agentIp, String agentPort, String agentName, String agentOS) {
+        String ip = "";
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
-        String ip = request.getRemoteAddr();
-        System.out.println("Received request from " + ip);
-        if (!ip.isEmpty()) {
-            serverService.heartBeat(ip + ":" + agentPort, agentName, agentOS);
+        ip = request.getRemoteAddr() + ":" + agentPort;
+        /*if(!Utils.containAlpha(agentIp)) {
+
         } else {
-            serverService.heartBeat(agentIp + ":" + agentPort, agentName, agentOS);
-        }
+            ip = agentIp + ":" + agentPort;
+        }*/
+        System.out.println("Agent IP: "+agentIp +" | Agent Port: "+agentPort +" | Received request from " + ip);
+        //trigger a heartbeat
+        serverService.heartBeat(ip , agentName, agentOS);
+
         ResponseEntity re = ResponseEntity.ok().build();
-        System.out.println(re.toString());
         return re;
     }
 
@@ -90,7 +94,6 @@ public class ServerController {
     public ResponseEntity getScript(@PathVariable("scriptId") Long scriptId) {
         Optional<ScriptEntity> scriptOptional = scriptService.getScriptById(scriptId);
         if (scriptOptional.isPresent()) {
-            System.out.println("present");
             return ResponseEntity.ok().body(new ScriptDetailsDTO(scriptOptional.get()));
         } else {
             return ResponseEntity.notFound().build();

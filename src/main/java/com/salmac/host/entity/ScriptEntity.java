@@ -48,4 +48,7 @@ public class ScriptEntity implements Serializable {
     @Column(name = "last_update_time", nullable = true)
     private LocalDateTime lastUpdateTime;
 
+    //@OneToOne(mappedBy = "scriptEntity")
+    //private TechniqueEntity techniqueEntity;
+
 }

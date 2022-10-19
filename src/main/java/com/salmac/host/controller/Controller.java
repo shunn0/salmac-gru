@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.salmac.host.files.FileStorageService;
 
 @CrossOrigin(origins = "http://localhost:3000")
-@RestController
+//@RestController
 public class Controller {
 	
 	@Autowired
@@ -27,6 +26,9 @@ public class Controller {
 
 	@Autowired
     private FileStorageService fileStorageService;
+
+	@Autowired
+	RestCaller restCaller;
 	
 	//@CrossOrigin(origins = "http://10.0.2.15:3000")
 	@GetMapping("/runcmd")
@@ -71,7 +73,7 @@ public class Controller {
 				List<String> res = executor.runMultipleCmd(cmds);
 				return ResponseEntity.ok().body(res);
 			} else{
-				return RestCaller.postMulticmdAtTargetEngine(serverIp,cmds);
+				return restCaller.postMultiCMDAtTargetEngine(serverIp,cmds);
 			}
 		} else {
 			return ResponseEntity.notFound().build();

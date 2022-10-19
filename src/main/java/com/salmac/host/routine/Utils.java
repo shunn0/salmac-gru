@@ -20,6 +20,18 @@ public class Utils {
 	    }
 	}
 
+	public static boolean containAlpha(String name) {
+		char[] chars = name.toCharArray();
+
+		for (char c : chars) {
+			if(Character.isLetter(c)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public static boolean isEmptyString(String string) {
 		return string == null || string.isEmpty();
 	}
