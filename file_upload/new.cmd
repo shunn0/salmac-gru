@@ -1,1 +1,0 @@
-netsh advfirewall show allprofiles

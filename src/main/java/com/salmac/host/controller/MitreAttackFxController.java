@@ -37,6 +37,11 @@ public class MitreAttackFxController {
         }
     }
 
+    @GetMapping("/")
+    public ResponseEntity getNetPrice(Double grossPrice, String countryIso) {
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/bycat")
     public ResponseEntity getTechniqueListByCategory(AttackCategory category) {
         List<TechniqueDTO> listOfTechniqueByCategory = attakService.getListOfTechniqueByCategory(category);

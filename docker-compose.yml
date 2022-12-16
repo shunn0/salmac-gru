@@ -8,20 +8,22 @@ services:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
-      - "3307:3306"
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
       - db:/var/lib/mysql
   hostapp:
+    depends_on:
+      - mysqldb
     build: .
     restart: on-failure
     env_file: ./.env
     ports:
-      - "8080:8080"
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
     environment:
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://208.109.58.44:3306/salmacdb?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC",
-        "spring.datasource.username" : "salmadmin",
-        "spring.datasource.password" : "MAth7HicbyqYR2c",
+        "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
         "spring.jpa.hibernate.ddl-auto" : "create-drop"
       }'
@@ -29,26 +31,26 @@ services:
       - .m2:/root/.m2
     stdin_open: true
     tty: true
-#  clientapp1:
-#      depends_on:
-#        - hostapp
-#      build:
-#        dockerfile: Dockerfile
-#        context: ../targetEngine
-#      restart: on-failure
-#      ports:
-#        - "8082:8082"
-#      environment:
-#        SPRING_APPLICATION_JSON: '{
-#              "file.upload-dir"  : ".",
-#              "server.port" : "8082",
-#              "salmac.host" : "http://hostapp:8080",
-#              "salmac.host.self":"http://clientapp1:8082"
-#            }'
-#      volumes:
-#        - .m2:/root/.m2
-#      stdin_open: true
-#      tty: true
+  clientapp1:
+      depends_on:
+        - hostapp
+      build:
+        dockerfile: Dockerfile
+        context: ../salmac-agent
+      restart: on-failure
+      ports:
+        - "8082:8082"
+      environment:
+        SPRING_APPLICATION_JSON: '{
+              "file.upload-dir"  : ".",
+              "server.port" : "$SPRING_LOCAL_PORT",
+              "salmac.host" : "http://hostapp:$SPRING_LOCAL_PORT",
+              "salmac.host.self":"http://clientapp1:8082"
+            }'
+      volumes:
+        - .m2:/root/.m2
+      stdin_open: true
+      tty: true
 #  clientapp2:
 #    depends_on:
 #      - hostapp
